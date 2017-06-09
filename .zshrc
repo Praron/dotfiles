@@ -20,6 +20,10 @@ bindkey ";5D" backward-word
 bindkey ";5A" beginning-of-line
 bindkey ";5B" end-of-line
 
+trueclear() { true; clear; print -n -P "$PS1";}
+zle -N trueclear
+bindkey '^l' trueclear
+
 # End of lines configured by zsh-newuser-install
 
 
