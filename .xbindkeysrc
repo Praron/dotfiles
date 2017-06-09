@@ -1,0 +1,24 @@
+## Key config file
+
+"setxkbmap us ; xmodmap ~/.Xmodmap ; exec killall -USR1 i3status"
+  Alt_R
+"setxkbmap ru ; xmodmap ~/.Xmodmap ; exec killall -USR1 i3status"
+  Shift + Alt_R
+"setxkbmap ru ; xmodmap ~/.Xmodmap ; exec killall -USR1 i3status"
+  Menu
+
+"amixer set Master 5%+ && exec killall -USR1 i3status"
+  XF86AudioRaiseVolume
+"amixer set Master 5%- && exec killall -USR1 i3status"
+  XF86AudioLowerVolume
+
+"amixer set Master 20%+ && exec killall -USR1 i3status"
+  Shift + XF86AudioRaiseVolume
+"amixer set Master 20%- && exec killall -USR1 i3status"
+  Shift + XF86AudioLowerVolume
+
+"amixer set Master toggle && exec killall -USR1 i3status"
+  XF86AudioMute
+
+"feh --bg-fill $(ls -d ~/Wallpapers/* | shuf -n 1)"
+  XF86Launch1

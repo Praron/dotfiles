@@ -1,0 +1,10 @@
+scroll_up Up
+scroll_down Down
+scroll_left Left
+scroll_right Right
+scroll_up_page S-Up 1-Up
+scroll_down_page S-Down 1-Down
+next_img C-Right
+prev_img C-Left
+zoom_out C-Down minus
+zoom_in C-Up equal
