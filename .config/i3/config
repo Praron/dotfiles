@@ -54,6 +54,9 @@ bindsym $mod+Shift+p exec subl3 -n
 # Start a FM
 bindsym $mod+p exec pcmanfm
 
+bindsym $mod+Shift+y exec ~/Scripts/mplayer_youtube.sh 
+
+
 # Kill focused window
 bindsym $mod+Shift+q kill
 # bindsym $mod+Escape kill
@@ -81,7 +84,7 @@ hide_edge_borders both
 new_window pixel 3
 
 #bindsym $mod+Ctrl+t border toggle
-#bindsym $mod+b border none
+bindsym $mod+Ctrl+Shift+b border none
 # use no window title and a thick border
 #bindsym $mod+Shift+t border normal 2
 
@@ -274,6 +277,12 @@ bindsym $mod+Tab workspace next
 bindsym Print exec --no-startup-id scrot '%Y-%m-%d-%H-%M-%S.png' -e 'mv $f ~/Screenshots/'
 bindsym --release Shift+Print exec --no-startup-id import ~/Screenshots/$(date +%Y-%m-%d-%H-%M-%S).png
 
+bindsym $mod+F9 exec feh $(ls -dp ~/Screenshots/* | grep -v /$ | sort -nr | head -1)
+
+#bindsym --release Ctrl+Shift+print exec --no-startup-id ~/Scripts/record_gif.sh
+bindsym --release Ctrl+Shift+Print exec --no-startup-id killall -s SIGTERM ffmpeg || ~/Scripts/record_gif.sh
+
+
 # Cmus control
 bindsym Ctrl+Home exec --no-startup-id cmus-remote -r ; exec --no-startup-id killall -USR1 i3status # prev
 bindsym Ctrl+End exec --no-startup-id cmus-remote -u ; exec --no-startup-id killall -USR1 i3status # pause/play
@@ -281,6 +290,13 @@ bindsym Ctrl+Shift+End exec --no-startup-id cmus-remote -p # replay
 bindsym Ctrl+Insert exec --no-startup-id cmus-remote -n ; exec --no-startup-id killall -USR1 i3status # next
 bindsym Ctrl+Shift+Home exec --no-startup-id cmus-remote -k -3 # seek-
 bindsym Ctrl+Shift+Insert exec --no-startup-id cmus-remote -k +3 # seek+
+
+#bindsym XF86AudioPrev exec --no-startup-id cmus-remote -r #; pkill -RTMIN+1 i3blocks
+#bindsym XF86AudioNext exec --no-startup-id cmus-remote -n #; pkill -RTMIN+1 i3blocks
+#bindsym Shift+XF86AudioPrev exec --no-startup-id cmus-remote -l -3 #; pkill -RTMIN+1 i3blocks
+#bindsym Shift+XF86AudioNext exec --no-startup-id cmus-remote -k +3 #; pkill -RTMIN+1 i3blocks
+#bindsym XF86AudioPlay exec --no-startup-id "cmus-remote -u" #; pkill -RTMIN+1 i3blocks
+#bindsym Shift+XF86AudioPlay exec --no-startup-id cmus-remote -p #; pkill -RTMIN+1 i3blocks
 
 
 #Lock screen
@@ -327,5 +343,6 @@ bar {
         position top
         # Using custom i3status.conf
 #        status_command i3status -c ~/.config/i3/i3status.conf
-        status_command i3status -c ~/.config/i3/i3status.conf | ~/.config/i3/my_i3status.py
+#        status_command i3status -c ~/.config/i3/i3status.conf | ~/.config/i3/my_i3status.py
+        status_command i3blocks -c ~/i3blocks.conf
 }
