@@ -154,7 +154,7 @@
 [urgency_low]
     # IMPORTANT: colors have to be defined in quotation marks.
     # Otherwise the '#' and following  would be interpreted as a comment.
-    frame_color = "#ff0000"
+    frame_color = "#000000"
     #background = "#000000"
     background = "#090C19"
     #foreground = "#999999"

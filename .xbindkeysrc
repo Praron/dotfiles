@@ -1,24 +1,38 @@
 ## Key config file
 
-"setxkbmap us ; xmodmap ~/.Xmodmap ; exec killall -USR1 i3status"
+"setxkbmap us ; xmodmap ~/.Xmodmap && pkill -RTMIN+1 i3blocks"
   Alt_R
-"setxkbmap ru ; xmodmap ~/.Xmodmap ; exec killall -USR1 i3status"
+"setxkbmap ru ; xmodmap ~/.Xmodmap && pkill -RTMIN+1 i3blocks"
   Shift + Alt_R
-"setxkbmap ru ; xmodmap ~/.Xmodmap ; exec killall -USR1 i3status"
+"setxkbmap ru ; xmodmap ~/.Xmodmap && pkill -RTMIN+1 i3blocks"
   Menu
 
-"amixer set Master 5%+ && exec killall -USR1 i3status"
+"amixer set Master 5%+ && pkill -RTMIN+1 i3blocks"
   XF86AudioRaiseVolume
-"amixer set Master 5%- && exec killall -USR1 i3status"
+"amixer set Master 5%- && pkill -RTMIN+1 i3blocks"
   XF86AudioLowerVolume
 
-"amixer set Master 20%+ && exec killall -USR1 i3status"
+"amixer set Master 20%+ && pkill -RTMIN+1 i3blocks"
   Shift + XF86AudioRaiseVolume
-"amixer set Master 20%- && exec killall -USR1 i3status"
+"amixer set Master 20%- && pkill -RTMIN+1 i3blocks"
   Shift + XF86AudioLowerVolume
 
-"amixer set Master toggle && exec killall -USR1 i3status"
+"amixer set Master toggle && pkill -RTMIN+1 i3blocks"
   XF86AudioMute
 
 "feh --bg-fill $(ls -d ~/Wallpapers/* | shuf -n 1)"
   XF86Launch1
+
+
+"cmus-remote -r ; pkill -RTMIN+1 i3blocks"
+  XF86AudioPrev
+"cmus-remote -n ; pkill -RTMIN+1 i3blocks"
+  XF86AudioNext
+"cmus-remote -l -3 ; pkill -RTMIN+1 i3blocks"
+  Shift+XF86AudioPrev
+"cmus-remote -k +3 ; pkill -RTMIN+1 i3blocks"
+  Shift+XF86AudioNext 
+"cmus-remote -u ; pkill -RTMIN+1 i3blocks"
+  XF86AudioPlay
+"cmus-remote -p ; pkill -RTMIN+1 i3blocks"
+  Shift+XF86AudioPlay

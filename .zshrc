@@ -1,3 +1,8 @@
+. ~/.antigen.zsh
+
+antigen bundle supercrabtree/k
+antigen apply
+
 # The following lines were added by compinstall
 
 zstyle ':completion:*' completer _complete _ignored
@@ -12,8 +17,27 @@ HISTSIZE=10000
 SAVEHIST=10000
 bindkey -e
 
+stty -ixon 
+stty -ixoff
+
 # Something from https://gist.github.com/luca-m/5957513
 export WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
+
+# Fuzzy search
+. /usr/share/fzf/key-bindings.zsh
+. /usr/share/fzf/completion.zsh
+export FZF_DEFAULT_COMMAND="fd --type file --color=always"
+export FZF_DEFAULT_OPTS="--ansi"
+export FZF_CTRL_R_OPTS="--height=100%"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND="fd --type directory --follow --hidden --exclude .git --color=always"
+export FZF_ALT_C_OPTS="--ansi --preview 'tree -C {} | head -64'"
+
+
+# Names coloring
+. /usr/share/LS_COLORS/dircolors.sh
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+
 
 bindkey ";5C" forward-word
 bindkey ";5D" backward-word
@@ -38,6 +62,7 @@ PS2='> '
 RPROMPT=''
 
 export PATH=$PATH:.
+export PATH=$PATH:~/Scripts
 
 zstyle ':completion:*' rehash true
 
@@ -57,3 +82,80 @@ function reload_autocomlete() {
          fi
 }
 compdef _functions reload
+
+
+# Change title to current/last command
+# trap 'echo -ne "\e]0;urxvt : $history[$HISTCMD]\007"' DEBUG
+
+# Case insensetive tab competion
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+
+# Open new terminal in same directory
+function open_urxvt() {urxvtc & disown}
+zle -N open_urxvt
+bindkey '^U' open_urxvt
+
+# Common ctrl/shift selection behaivor
+r-delregion() {
+  if ((REGION_ACTIVE)) then
+     zle kill-region
+  else 
+    local widget_name=$1
+    shift
+    zle $widget_name -- $@
+  fi
+}
+
+r-deselect() {
+  ((REGION_ACTIVE = 0))
+  local widget_name=$1
+  shift
+  zle $widget_name -- $@
+}
+
+r-select() {
+  ((REGION_ACTIVE)) || zle set-mark-command
+  local widget_name=$1
+  shift
+  zle $widget_name -- $@
+}
+
+for key     kcap   seq        mode   widget (
+    sleft   kLFT   $'\e[1;2D' select   backward-char
+    sright  kRIT   $'\e[1;2C' select   forward-char
+    sup     kri    $'\e[1;2A' select   up-line-or-history
+    sdown   kind   $'\e[1;2B' select   down-line-or-history
+
+    send    kEND   $'\E[1;2F' select   end-of-line
+    send2   x      $'\E[4;2~' select   end-of-line
+
+    shome   kHOM   $'\E[1;2H' select   beginning-of-line
+    shome2  x      $'\E[1;2~' select   beginning-of-line
+
+    left    kcub1  $'\EOD'    deselect backward-char
+    right   kcuf1  $'\EOC'    deselect forward-char
+
+    end     kend   $'\EOF'    deselect end-of-line
+    end2    x      $'\E4~'    deselect end-of-line
+
+    home    khome  $'\EOH'    deselect beginning-of-line
+    home2   x      $'\E1~'    deselect beginning-of-line
+
+    csleft  x      $'\E[1;6D' select   backward-word
+    csright x      $'\E[1;6C' select   forward-word
+    csend   x      $'\E[1;6F' select   end-of-line
+    cshome  x      $'\E[1;6H' select   beginning-of-line
+
+    cleft   x      $'\E[1;5D' deselect backward-word
+    cright  x      $'\E[1;5C' deselect forward-word
+
+    del     kdch1   $'\E[3~'  delregion delete-char
+    bs      x       $'^?'     delregion backward-delete-char
+
+  ) {
+  eval "key-$key() {
+    r-$mode $widget \$@
+  }"
+  zle -N key-$key
+  bindkey ${terminfo[$kcap]-$seq} key-$key
+}

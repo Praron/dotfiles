@@ -26,9 +26,13 @@ font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
+force_focus_wrapping no
+focus_wrapping no
+
 # exec twmnd &
 # Notification manager daemon
 exec --no-startup-id dunst
+exec --no-startup-id unclutter --timeout 2 --jitter 5 --ignore-scrolling
 
 # Clipboard manager daemon
 exec --no-startup-id clipmenud
@@ -46,7 +50,8 @@ bindsym $mod+F8 exec --no-startup-id ~/Scripts/trackpoint_mode_toggle.sh
 
 
 # Start a terminal
-bindsym $mod+Return exec i3-sensible-terminal
+#bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Return exec ~/Scripts/urxvtc_or_urxvtd.sh
 
 # Start ST3
 bindsym $mod+Shift+p exec subl3 -n
@@ -55,7 +60,7 @@ bindsym $mod+Shift+p exec subl3 -n
 bindsym $mod+p exec pcmanfm
 
 bindsym $mod+Shift+y exec ~/Scripts/mplayer_youtube.sh 
-
+bindsym $mod+w exec ~/Scripts/dmenu_wifi_connect.sh
 
 # Kill focused window
 bindsym $mod+Shift+q kill
@@ -87,7 +92,6 @@ new_window pixel 3
 bindsym $mod+Ctrl+Shift+b border none
 # use no window title and a thick border
 #bindsym $mod+Shift+t border normal 2
-
 
 # change focus
 bindsym $mod+h focus left
@@ -138,6 +142,18 @@ bindsym $mod+a focus parent
 
 # focus the child container
 bindsym $mod+Shift+a focus child
+
+workspace 1 output LVDS-1
+workspace 2 output LVDS-1
+workspace 3 output LVDS-1
+workspace 4 output LVDS-1
+workspace 5 output LVDS-1
+workspace 6 output LVDS-1
+workspace 7 output VGA-1
+workspace 8 output VGA-1
+workspace 9 output VGA-1
+workspace 0 output LVDS-1
+
 
 # switch to workspace
 bindsym $mod+1 workspace number 1
@@ -270,14 +286,14 @@ bindsym $mod+Tab workspace next
 #bindsym $mod+Ctrl+Z exec "setxkbmap -layout 'ru'" ; exec killall -USR1 i3status
 
 
-
 # bindsym $mod+F1 exec "setxkbmap -layout 'ru'"
+# bindsym $mod+F2 exec --no-startup-id xrandr --output VGA-2 --off
 
 # Screenshot
 bindsym Print exec --no-startup-id scrot '%Y-%m-%d-%H-%M-%S.png' -e 'mv $f ~/Screenshots/'
 bindsym --release Shift+Print exec --no-startup-id import ~/Screenshots/$(date +%Y-%m-%d-%H-%M-%S).png
 
-bindsym $mod+F9 exec feh $(ls -dp ~/Screenshots/* | grep -v /$ | sort -nr | head -1)
+bindsym $mod+F9 exec --no-startup-id feh $(ls -dp ~/Screenshots/* | grep -v /$ | sort -nr | head -1)
 
 #bindsym --release Ctrl+Shift+print exec --no-startup-id ~/Scripts/record_gif.sh
 bindsym --release Ctrl+Shift+Print exec --no-startup-id killall -s SIGTERM ffmpeg || ~/Scripts/record_gif.sh
@@ -321,28 +337,44 @@ client.urgent #383a3b #383a3b #ee0000
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
+        output LVDS-1
         colors {
         # Whole color settings background #000000 statusline #ffffff separator #666666
         statusline #dddddd
 
         # Type             border  background font
         focused_workspace  #777777 #777777 #000000
-#        focused_workspace  #008fff #007fff #ffffff
-        active_workspace   #2e2e2e #5f676a #dddddd
+        active_workspace   #444444 #444444 #000000
         inactive_workspace #000000 #000000 #bbbbbb
-#        inactive_workspace #333333 #222222 #888888
         urgent_workspace   #aa0000 #990000 #ffffff
         }
 
-#        separator_symbol "|"
-#        tray_padding 10
-#        mode hide
         tray_output none
 
         # i3bar position
         position top
         # Using custom i3status.conf
-#        status_command i3status -c ~/.config/i3/i3status.conf
-#        status_command i3status -c ~/.config/i3/i3status.conf | ~/.config/i3/my_i3status.py
-        status_command i3blocks -c ~/i3blocks.conf
+        status_command i3blocks
+}
+
+
+bar {
+        output VGA-1
+        mode hide
+        colors {
+        # Whole color settings background #000000 statusline #ffffff separator #666666
+        statusline #dddddd
+
+        # Type             border  background font
+        focused_workspace  #777777 #777777 #000000
+        active_workspace   #444444 #444444 #000000
+        inactive_workspace #000000 #000000 #bbbbbb
+        urgent_workspace   #aa0000 #990000 #ffffff
+        }
+
+        tray_output none
+
+        # i3bar position
+        position bottom
+        # Using custom i3status.conf
 }
