@@ -1,1 +1,0 @@
-curl https://api.pushbullet.com/v2/pushes -X POST -u o.P9PRBcEf9fb5eOPqnFdgEq4qIuTGr53B: --header "Content-Type: application/json" --data-binary "{\"type\": \"note\", \"title\":\"$1\", \"body\": \"$2\", \"device_iden\": \"ujAuCYGLYJMsjz7O3P0Jl6\"}"
