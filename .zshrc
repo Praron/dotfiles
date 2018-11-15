@@ -13,11 +13,21 @@ compinit
 # End of lines added by compinstall
 # Lines configured by zsh-newuser-install
 HISTFILE=~/.histfile
-HISTSIZE=10000
-SAVEHIST=10000
+HISTSIZE=100000
+SAVEHIST=100000
 bindkey -e
 
-stty -ixon 
+# Remove duplications in zsh history
+setopt EXTENDED_HISTORY
+setopt HIST_EXPIRE_DUPS_FIRST
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_FIND_NO_DUPS
+setopt HIST_SAVE_NO_DUPS
+setopt HIST_BEEP
+
+stty -ixon
 stty -ixoff
 
 # Something from https://gist.github.com/luca-m/5957513
@@ -44,11 +54,10 @@ bindkey ";5D" backward-word
 bindkey ";5A" beginning-of-line
 bindkey ";5B" end-of-line
 
+
 trueclear() { true; clear; print -n -P "$PS1";}
 zle -N trueclear
 bindkey '^l' trueclear
-
-# End of lines configured by zsh-newuser-install
 
 
 alias ls='ls --color=auto'

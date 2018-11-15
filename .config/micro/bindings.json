@@ -1,4 +1,6 @@
 {
+	"AltUp": "MoveLinesUp",
+	"AltDown": "MoveLinesDown",
 	"CtrlUnderscore": "comment.comment",
     "\u001b[1;2A": "SelectUp",
     "\u001b[1;2B": "SelectDown",
