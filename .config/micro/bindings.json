@@ -1,4 +1,10 @@
 {
+	"Alt-g": "UnbindKey",
+	"CtrlG": "UnbindKey",
+	"\u001b[27;ctab": "NextTab",
+	"\u001b[27;cstab": "PreviousTab",
+	"CtrlTab": "NextTab",
+	"CtrlShiftTab": "PreviousTab",
 	"AltUp": "MoveLinesUp",
 	"AltDown": "MoveLinesDown",
 	"CtrlUnderscore": "comment.comment",

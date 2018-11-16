@@ -33,15 +33,22 @@ stty -ixoff
 # Something from https://gist.github.com/luca-m/5957513
 export WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
 
+
+export VISUAL=micro
+export EDITOR=micro
+export PAGER=less
+
+
 # Fuzzy search
 . /usr/share/fzf/key-bindings.zsh
 . /usr/share/fzf/completion.zsh
-export FZF_DEFAULT_COMMAND="fd --type file --color=always"
+export FZF_DEFAULT_COMMAND="fd --color=always"
 export FZF_DEFAULT_OPTS="--ansi"
 export FZF_CTRL_R_OPTS="--height=100%"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_ALT_C_COMMAND="fd --type directory --follow --hidden --exclude .git --color=always"
+export FZF_ALT_C_COMMAND="fd --type directory --follow --color=always"
 export FZF_ALT_C_OPTS="--ansi --preview 'tree -C {} | head -64'"
+export FZF_COMPLETION_TRIGGER="*"
 
 
 # Names coloring
@@ -53,7 +60,7 @@ bindkey ";5C" forward-word
 bindkey ";5D" backward-word
 bindkey ";5A" beginning-of-line
 bindkey ";5B" end-of-line
-
+bindkey "e[3~" delete-char
 
 trueclear() { true; clear; print -n -P "$PS1";}
 zle -N trueclear
@@ -63,17 +70,24 @@ bindkey '^l' trueclear
 alias ls='ls --color=auto'
 alias tree='tree -C'
 alias bc='bc -q'
+alias bd='. bd -si'
+alias ranger='ranger --choosedir=$HOME/.rangerdir; LASTDIR=`cat $HOME/.rangerdir`; cd "$LASTDIR"'
 
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
-PS1='[%T] %F{%(?.green.red)}[%n@%M:%~]%f %# '
+# PS1='[%T] %F{%(?.green.red)}[%n@%M:%~]%f %# '
+# PS1='[%T] %F{%(?.green.red)}[%-100(l.%n@%M:%~.%30<..<%~)]%f %# '
+# PS1='%-40(l.[%T] .%T)%F{%(?.green.red)}[%-100(l.%n@%M:%~.%-40(l.%40<\s\s<%~.@))]%f %# '
+PS1='%-47(l.[%T] .)%F{%(?.green.red)}%-100(l.[%n@%M:%~].%-40(l.[%25<..<%~].[]))%f %# '
 PS2='> '
 RPROMPT=''
 
 export PATH=$PATH:.
 export PATH=$PATH:~/Scripts
 
+
 zstyle ':completion:*' rehash true
+
 
 #when we create new function or install new bin , the default zsh cant get the new completion for us,so we 
 #can add a new function for this problem,you can add the blow content in your .zshrc file
@@ -96,13 +110,16 @@ compdef _functions reload
 # Change title to current/last command
 # trap 'echo -ne "\e]0;urxvt : $history[$HISTCMD]\007"' DEBUG
 
+
 # Case insensetive tab competion
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+
 
 # Open new terminal in same directory
 function open_urxvt() {urxvtc & disown}
 zle -N open_urxvt
 bindkey '^U' open_urxvt
+
 
 # Common ctrl/shift selection behaivor
 r-delregion() {

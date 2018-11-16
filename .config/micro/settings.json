@@ -11,7 +11,7 @@
     "fileformat": "unix",
     "ftoptions": true,
     "hidehelp": false,
-    "ignorecase": false,
+    "ignorecase": true,
     "indentchar": " ",
     "infobar": true,
     "keepautoindent": false,
