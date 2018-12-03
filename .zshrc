@@ -128,7 +128,7 @@ r-delregion() {
   else 
     local widget_name=$1
     shift
-    zle $widget_name -- $@
+    zle $widget_name -- precmd_functionsprecmd_functionsprecmd_functionsprecmd_functionsprecmd_functionsprecmd_functionsprecmd_functionsprecmd_functionsprecmd_functions$@
   fi
 }
 
@@ -184,4 +184,60 @@ for key     kcap   seq        mode   widget (
   }"
   zle -N key-$key
   bindkey ${terminfo[$kcap]-$seq} key-$key
+}
+
+
+# Auto-title
+TERM_TITLE="urxvt"
+function title {
+  emulate -L zsh
+  setopt prompt_subst
+
+  [[ "$EMACS" == *term* ]] && return
+
+  # if $2 is unset use $1 as default
+  # if it is set and empty, leave it as is
+  : ${2=$1}
+
+  case "$TERM" in
+    cygwin|xterm*|putty*|rxvt*|ansi)
+      print -Pn "\e]2;$2:q\a" # set window name
+      print -Pn "\e]1;$1:q\a" # set tab name
+      ;;
+    screen*)
+      print -Pn "\ek$1:q\e\\" # set screen hardstatus
+      ;;
+    *)
+      if [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
+        print -Pn "\e]2;$2:q\a" # set window name
+        print -Pn "\e]1;$1:q\a" # set tab name
+      else
+        # Try to use terminfo to set the title
+        # If the feature is available set title
+        if [[ -n "$terminfo[fsl]" ]] && [[ -n "$terminfo[tsl]" ]]; then
+	  echoti tsl
+	  print -Pn "$1"
+	  echoti fsl
+	fi
+      fi
+      ;;
+  esac
+}
+
+function precmd {
+	emulate -L zsh
+	
+	title $TERM_TITLE
+}
+
+# Runs before executing the command
+function preexec {
+	emulate -L zsh
+	setopt extended_glob
+	
+	# cmd name only, or if this is sudo or ssh, the next cmd
+	local CMD=${1[(wr)^(*=*|sudo|ssh|mosh|rake|-*)]:gs/%/%%}
+	local LINE="${2:gs/%/%%}"
+
+	title '$CMD' '%100>...>$LINE%<<'
 }

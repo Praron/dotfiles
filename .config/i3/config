@@ -41,6 +41,8 @@ bindsym $mod+c exec --no-startup-id clipmenu
 # Autolock after idle
 exec --nostartup-id xautolock -time 30 -locker "systemctl suspend" -detectsleep
 
+
+
 # Translate-to-Russian script
 bindsym $mod+o exec --no-startup-id ~/Scripts/dmenu_translate_notification.sh
 
