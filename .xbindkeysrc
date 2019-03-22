@@ -1,11 +1,16 @@
 ## Key config file
 
-"setxkbmap us ; xmodmap ~/.Xmodmap && pkill -RTMIN+1 i3blocks"
+"setxkbmap us -option caps:super ; xmodmap ~/.Xmodmap && pkill -RTMIN+1 i3blocks"
   Alt_R
-"setxkbmap ru ; xmodmap ~/.Xmodmap && pkill -RTMIN+1 i3blocks"
+"setxkbmap ru -option caps:super ; xmodmap ~/.Xmodmap && pkill -RTMIN+1 i3blocks"
   Shift + Alt_R
-"setxkbmap ru ; xmodmap ~/.Xmodmap && pkill -RTMIN+1 i3blocks"
+"setxkbmap ru -option caps:super ; xmodmap ~/.Xmodmap && pkill -RTMIN+1 i3blocks"
   Menu
+
+#"xdotool key Left"
+#  Control_R
+
+
 
 "amixer set Master 5%+ && pkill -RTMIN+1 i3blocks"
   XF86AudioRaiseVolume
@@ -31,7 +36,7 @@
 "cmus-remote -l -3 ; pkill -RTMIN+1 i3blocks"
   Shift+XF86AudioPrev
 "cmus-remote -k +3 ; pkill -RTMIN+1 i3blocks"
-  Shift+XF86AudioNext 
+  Shift+XF86AudioNext
 "cmus-remote -u ; pkill -RTMIN+1 i3blocks"
   XF86AudioPlay
 "cmus-remote -p ; pkill -RTMIN+1 i3blocks"

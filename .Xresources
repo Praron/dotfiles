@@ -79,60 +79,81 @@
 
 
 
-!! euphrasia v2 by bohoomil
+! !! euphrasia v2 by bohoomil
+!
+! ! euphrasia fg/bg
+! URxvt*background:  #090C19
+! URxvt*foreground:  #E6E6E6
+! *cursorColor:      #1AAA13
+!
+! ! X.org apps bg/fg
+! *background: #D0CECB
+! *foreground: #090C19
+!
+! ! black
+! *color0:  #222946
+! ! dark grey
+! *color8:  #8C8B89
+!
+! ! red
+! *color1:  #B32323
+! ! bright red
+! *color9:  #DC2C2C
+!
+! ! green
+! *color2:  #1AAA13
+! ! bright green
+! *color10: #5DCE33
+!
+! ! yellow
+! *color3:  #FF9F3E
+! ! bright yellow
+! *color11: #E6CB29
+!
+! ! blue
+! *color4:  #4957F3
+! ! bright blue
+! *color12: #4D79FF
+!
+! ! magenta
+! *color5:	#BF3E94
+! ! bright magenta
+! *color13:	#B641CC
+!
+! ! cyan
+! *color6:  #09A5B3
+! ! bright cyan
+! *color14: #3CB6F3
+!
+! ! light grey
+! *color7:  #AEAEAE
+! ! white
+! *color15: #DBDDE4
 
-! euphrasia fg/bg
-URxvt*background:  #090C19
-URxvt*foreground:  #E6E6E6
-*cursorColor:      #1AAA13
-
-! X.org apps bg/fg
-*background: #D0CECB
-*foreground: #090C19
-
-! black
-*color0:  #222946
-! dark grey
-*color8:  #8C8B89
-
-! red
-*color1:  #B32323
-! bright red
-*color9:  #DC2C2C
-
-! green
-*color2:  #1AAA13
-! bright green
-*color10: #5DCE33
-
-! yellow
-*color3:  #FF9F3E
-! bright yellow
-*color11: #E6CB29
-
-! blue
-*color4:  #4957F3
-! bright blue
-*color12: #4D79FF
-
-! magenta
-*color5:	#BF3E94
-! bright magenta
-*color13:	#B641CC
-
-! cyan
-*color6:  #09A5B3
-! bright cyan
-*color14: #3CB6F3
-
-! light grey
-*color7:  #AEAEAE
-! white
-*color15: #DBDDE4
 
 
+! Dracula Xresources palette
+*.foreground: #F8F8F2
+*.background: #282A36
+*.color0:     #000000
+*.color8:     #4D4D4D
+*.color1:     #FF5555
+*.color9:     #FF6E67
+*.color2:     #50FA7B
+*.color10:    #5AF78E
+*.color3:     #F1FA8C
+*.color11:    #F4F99D
+*.color4:     #BD93F9
+*.color12:    #CAA9FA
+*.color5:     #FF79C6
+*.color13:    #FF92D0
+*.color6:     #8BE9FD
+*.color14:    #9AEDFE
+*.color7:     #BFBFBF
+*.color15:    #E6E6E6
 
-URxvt.perl-ext-common: default,selection,matcher,resize-font
+
+URxvt.perl-ext-common: default,selection,matcher,resize-font,-searchable-scrollback
 
 URxvt.font: xft:Fira Mono:size=12
 URxvt.scrollBar: false

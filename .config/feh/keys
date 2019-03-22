@@ -6,5 +6,9 @@ scroll_up_page S-Up 1-Up
 scroll_down_page S-Down 1-Down
 next_img C-Right
 prev_img C-Left
+next_img Page_Down
+prev_img Page_Up
+jump_fwd S-Page_Down
+jump_back S-Page_Up
 zoom_out C-Down minus
 zoom_in C-Up equal

@@ -13,7 +13,7 @@ set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below. ISO 10646 = Unicode
-font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
+# font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
 # The font above is very space-efficient, that is, it looks good, sharp and
 # clear in small sizes. However, if you need a lot of unicode glyphs or
 # right-to-left text rendering, you should instead use pango for rendering and
@@ -21,7 +21,8 @@ font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
 # font pango:DejaVu Sans Mono 10
 # font pango: Monospace 10
 # font pango: SCP 9
-# font pango: Ubuntu Mono 10
+font pango: Ubuntu Mono 12
+# font pango: Fira Mono 9
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -54,14 +55,15 @@ bindsym $mod+F8 exec --no-startup-id ~/Scripts/trackpoint_mode_toggle.sh
 # Start a terminal
 #bindsym $mod+Return exec i3-sensible-terminal
 bindsym $mod+Return exec ~/Scripts/urxvtc_or_urxvtd.sh
+#bindsym $mod+Shift+Return exec --no-startup-id samedir.sh
 
-# Start ST3
-bindsym $mod+Shift+p exec subl3 -n
+# Start text editor
+bindsym $mod+Shift+p exec ~/Scripts/urxvtc_or_urxvtd.sh -e micro
 
 # Start a FM
 bindsym $mod+p exec pcmanfm
 
-bindsym $mod+Shift+y exec ~/Scripts/mplayer_youtube.sh 
+bindsym $mod+Shift+y exec ~/Scripts/mplayer_youtube.sh
 bindsym $mod+w exec ~/Scripts/dmenu_wifi_connect.sh
 
 # Kill focused window
@@ -150,11 +152,11 @@ workspace 2 output LVDS-1
 workspace 3 output LVDS-1
 workspace 4 output LVDS-1
 workspace 5 output LVDS-1
-workspace 6 output LVDS-1
+workspace 6 output VGA-1
 workspace 7 output VGA-1
 workspace 8 output VGA-1
 workspace 9 output VGA-1
-workspace 0 output LVDS-1
+workspace 10 output VGA-1
 
 
 # switch to workspace
@@ -259,7 +261,7 @@ exec --no-startup-id ~/.fehbg
 
 #exec setxkbmap -layout 'us,ru' -option 'grp:alt_shift_toggle,grp_led:scroll,numpad:microsoft,compose:caps'
 # exec setxkbmap -option 'caps:escape'
- 
+
 
 # Rename workspace
 #bindsym $mod+n exec /home/escapsit/.i3/rename_workspace
@@ -295,7 +297,7 @@ bindsym $mod+Tab workspace next
 bindsym Print exec --no-startup-id scrot '%Y-%m-%d-%H-%M-%S.png' -e 'mv $f ~/Screenshots/'
 bindsym --release Shift+Print exec --no-startup-id import ~/Screenshots/$(date +%Y-%m-%d-%H-%M-%S).png
 
-bindsym $mod+F9 exec --no-startup-id feh $(ls -dp ~/Screenshots/* | grep -v /$ | sort -nr | head -1)
+bindsym $mod+F9 exec --no-startup-id feh --no-xinerama $(ls -dp ~/Screenshots/* | grep -v /$ | sort -nr | head -1)
 
 #bindsym --release Ctrl+Shift+print exec --no-startup-id ~/Scripts/record_gif.sh
 bindsym --release Ctrl+Shift+Print exec --no-startup-id killall -s SIGTERM ffmpeg || ~/Scripts/record_gif.sh
@@ -323,60 +325,91 @@ bindsym --release $mod+Control+l exec --no-startup-id xdotool key Alt_R ; exec -
 bindsym --release XF86AudioMicMute exec --no-startup-id xdotool key Alt_R ; exec --no-startup-id ~/Scripts/screen_lock.sh ; exec xset dpms force off
 
 # Colors
-#client.focused #10747D #10747D #111111
-client.focused #c5291b #c5291b #111111
-#client.focused #777777 #777777 #000000
-#client.unfocused #062e32 #09454B #bbbbbb
-#client.unfocused #404040 #444444 #bbbbbb
-#client.unfocused #252525 #333333 #bbbbbb
-client.unfocused #252525 #2e2e2e #bbbbbb
-#client.focused_inactive #062e32 #0c5c64 #bbbbbb
-#client.focused_inactive #982015 #982015 #111111
-client.focused_inactive #555555 #555555 #111111
-#client.focused_inactive #555555 #555555 #bbbbbb
-client.urgent #383a3b #383a3b #ee0000
+# class                 border  bground text    indicator child_border
+client.focused          #6272A4 #6272A4 #282a36 #6272A4   #6272A4
+client.focused_inactive #44475A #44475A #282a36 #44475A   #44475A
+client.unfocused        #282A36 #282A36 #BFBFBF #282A36   #282A36
+client.urgent           #44475A #FF5555 #F8F8F2 #FF5555   #FF5555
+client.placeholder      #282A36 #282A36 #F8F8F2 #282A36   #282A36
+client.background #F8F8F2
+
+
+#client.focused #ff5555 #ff5555 #282a36
+#client.unfocused #282a36 #282a36 #6272a4
+#client.focused_inactive #555555 #555555 #111111
+#client.urgent #383a3b #383a3b #ee0000
+
+
+#client.focused #c5291b #c5291b #111111
+#client.unfocused #252525 #2e2e2e #bbbbbb
+#client.focused_inactive #555555 #555555 #111111
+#client.urgent #383a3b #383a3b #ee0000
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
         output LVDS-1
-        colors {
-        # Whole color settings background #000000 statusline #ffffff separator #666666
-        statusline #dddddd
+        # colors { # Dracula theme
+        #     background #282A36
+        #     statusline #F8F8F2
+        #     separator  #44475A
 
-        # Type             border  background font
-        focused_workspace  #777777 #777777 #000000
-        active_workspace   #444444 #444444 #000000
-        inactive_workspace #000000 #000000 #bbbbbb
-        urgent_workspace   #aa0000 #990000 #ffffff
+        #     focused_workspace  #44475A #44475A #F8F8F2
+        #     active_workspace   #282A36 #44475A #F8F8F2
+        #     inactive_workspace #282A36 #282A36 #BFBFBF
+        #     urgent_workspace   #FF5555 #FF5555 #F8F8F2
+        #     binding_mode       #FF5555 #FF5555 #F8F8F2
+        # }
+
+        colors {
+        	# Whole color settings background #000000 statusline #ffffff separator #666666
+        	statusline #dddddd
+
+	        # Type             border  background font
+            focused_workspace  #44475A #44475A #000000
+    	    # focused_workspace  #777777 #777777 #000000
+            active_workspace   #333333 #333333 #000000
+       	    inactive_workspace #000000 #000000 #bbbbbb
+       	    urgent_workspace   #aa0000 #990000 #ffffff
         }
 
         tray_output none
 
-        # i3bar position
         position top
-        # Using custom i3status.conf
         status_command i3blocks
 }
 
 
 bar {
         output VGA-1
-        mode hide
-        colors {
-        # Whole color settings background #000000 statusline #ffffff separator #666666
-        statusline #dddddd
 
-        # Type             border  background font
-        focused_workspace  #777777 #777777 #000000
-        active_workspace   #444444 #444444 #000000
-        inactive_workspace #000000 #000000 #bbbbbb
-        urgent_workspace   #aa0000 #990000 #ffffff
+        # colors { # Dracula theme
+        #     background #282A36
+        #     statusline #F8F8F2
+        #     separator  #44475A
+
+        #     focused_workspace  #44475A #44475A #F8F8F2
+        #     active_workspace   #282A36 #44475A #F8F8F2
+        #     inactive_workspace #282A36 #282A36 #BFBFBF
+        #     urgent_workspace   #FF5555 #FF5555 #F8F8F2
+        #     binding_mode       #FF5555 #FF5555 #F8F8F2
+        # }
+
+        colors {
+            # Whole color settings background #000000 statusline #ffffff separator #666666
+            statusline #dddddd
+
+            # Type             border  background font
+            focused_workspace  #44475A #44475A #000000
+            active_workspace   #333333 #333333 #000000
+            # focused_workspace  #777777 #777777 #000000
+            # active_workspace   #444444 #444444 #000000
+            inactive_workspace #000000 #000000 #bbbbbb
+            urgent_workspace   #aa0000 #990000 #ffffff
         }
 
         tray_output none
 
-        # i3bar position
         position bottom
-        # Using custom i3status.conf
+        status_command i3blocks
 }

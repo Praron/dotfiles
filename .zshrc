@@ -1,7 +1,6 @@
-. ~/.antigen.zsh
-
-antigen bundle supercrabtree/k
-antigen apply
+# . ~/.antigen.zsh
+# antigen bundle supercrabtree/k
+# antigen apply
 
 # The following lines were added by compinstall
 
@@ -27,6 +26,11 @@ setopt HIST_FIND_NO_DUPS
 setopt HIST_SAVE_NO_DUPS
 setopt HIST_BEEP
 
+setopt autopushd pushdminus pushdtohome autocd pushdignoredups
+
+# I don't know why, but 'e' keypress made delay without this line
+KEYTIMEOUT=1
+
 stty -ixon
 stty -ixoff
 
@@ -38,6 +42,9 @@ export VISUAL=micro
 export EDITOR=micro
 export PAGER=less
 
+
+# For Telegram
+export FONTCONFIG_FILE=~/.config/tgfonts.conf
 
 # Fuzzy search
 . /usr/share/fzf/key-bindings.zsh
@@ -62,23 +69,32 @@ bindkey ";5A" beginning-of-line
 bindkey ";5B" end-of-line
 bindkey "e[3~" delete-char
 
+
 trueclear() { true; clear; print -n -P "$PS1";}
 zle -N trueclear
 bindkey '^l' trueclear
 
-
+alias python='python -q'
 alias ls='ls --color=auto'
+alias l='ls --color=auto'
 alias tree='tree -C'
 alias bc='bc -q'
 alias bd='. bd -si'
 alias ranger='ranger --choosedir=$HOME/.rangerdir; LASTDIR=`cat $HOME/.rangerdir`; cd "$LASTDIR"'
+alias tldr='cht.sh'
+
+function from_copybuffer() {
+    xsel -b > $1
+}
 
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+
 
 # PS1='[%T] %F{%(?.green.red)}[%n@%M:%~]%f %# '
 # PS1='[%T] %F{%(?.green.red)}[%-100(l.%n@%M:%~.%30<..<%~)]%f %# '
 # PS1='%-40(l.[%T] .%T)%F{%(?.green.red)}[%-100(l.%n@%M:%~.%-40(l.%40<\s\s<%~.@))]%f %# '
-PS1='%-47(l.[%T] .)%F{%(?.green.red)}%-100(l.[%n@%M:%~].%-40(l.[%25<..<%~].[]))%f %# '
+# PS1='%-47(l.[%T] .)%F{%(?.green.red)}%-100(l.[%n@%M:%~].%-40(l.[%25<..<%~].[]))%f %# '
+PS1='%-47(l.%T .)%F{%(?.green.red)}%-100(l.%n@%M:%~.%-40(l.%25<..<%~.[]))%f %# '
 PS2='> '
 RPROMPT=''
 
@@ -89,7 +105,7 @@ export PATH=$PATH:~/Scripts
 zstyle ':completion:*' rehash true
 
 
-#when we create new function or install new bin , the default zsh cant get the new completion for us,so we 
+#when we create new function or install new bin , the default zsh cant get the new completion for us,so we
 #can add a new function for this problem,you can add the blow content in your .zshrc file
 function reload_autocomlete() {
          if [[ "$#*" -eq 0 ]]; then
@@ -125,7 +141,7 @@ bindkey '^U' open_urxvt
 r-delregion() {
   if ((REGION_ACTIVE)) then
      zle kill-region
-  else 
+  else
     local widget_name=$1
     shift
     zle $widget_name -- precmd_functionsprecmd_functionsprecmd_functionsprecmd_functionsprecmd_functionsprecmd_functionsprecmd_functionsprecmd_functionsprecmd_functions$@
@@ -226,7 +242,7 @@ function title {
 
 function precmd {
 	emulate -L zsh
-	
+
 	title $TERM_TITLE
 }
 
@@ -234,10 +250,25 @@ function precmd {
 function preexec {
 	emulate -L zsh
 	setopt extended_glob
-	
+
 	# cmd name only, or if this is sudo or ssh, the next cmd
 	local CMD=${1[(wr)^(*=*|sudo|ssh|mosh|rake|-*)]:gs/%/%%}
 	local LINE="${2:gs/%/%%}"
 
 	title '$CMD' '%100>...>$LINE%<<'
 }
+fpath=(~/.config/cheetsh_completion $fpath)
+
+
+
+if [[ "${terminfo[kcuu1]}" != "" ]]; then
+autoload -U up-line-or-beginning-search
+zle -N up-line-or-beginning-search
+bindkey "${terminfo[kcuu1]}" up-line-or-beginning-search
+fi
+
+if [[ "${terminfo[kcud1]}" != "" ]]; then
+autoload -U down-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey "${terminfo[kcud1]}" down-line-or-beginning-search
+fi

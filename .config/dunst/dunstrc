@@ -1,5 +1,5 @@
 [global]
-    font = Monospace 12
+    font = Fira Mono 12
 
     # allow a small subset of html markup:
     # <b>bold</b>
@@ -9,7 +9,7 @@
     #
     # for a complete reference see http://developer.gnome.org/pango/stable/PangoMarkupFormat.html
     # If markup is not allowed, those tags will be stripped out of the message.
-    allow_markup = yes
+    markup = yes
 
     # The format of the message. Possible variables are:
     #   %a  appname
@@ -128,8 +128,7 @@
     icon_position = off
     max_icon_size = 80
 
-[frame]
-    width = 3
+    frame_width = 3
     #color = "#999999"
     color = "#000000"
 
