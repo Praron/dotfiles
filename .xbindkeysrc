@@ -1,16 +1,13 @@
 ## Key config file
 
-"setxkbmap us -option caps:super ; xmodmap ~/.Xmodmap && pkill -RTMIN+1 i3blocks"
-  Alt_R
-"setxkbmap ru -option caps:super ; xmodmap ~/.Xmodmap && pkill -RTMIN+1 i3blocks"
-  Shift + Alt_R
-"setxkbmap ru -option caps:super ; xmodmap ~/.Xmodmap && pkill -RTMIN+1 i3blocks"
-  Menu
-
-#"xdotool key Left"
-#  Control_R
-
-
+#"setxkbmap us ; xkbcomp ~/.config/xkb/us-hjkl $DISPLAY ; xmodmap ~/.Xmodmap && pkill -RTMIN+1 i3blocks"
+#  Alt_R
+#"setxkbmap ru ; xkbcomp ~/.config/xkb/ru-hjkl $DISPLAY ; xmodmap ~/.Xmodmap && pkill -RTMIN+1 i3blocks"
+#  Shift + Alt_R
+#"setxkbmap ru ; xkbcomp ~/.config/xkb/ru-hjkl $DISPLAY ; xmodmap ~/.Xmodmap && pkill -RTMIN+1 i3blocks"
+#  Menu
+"xkbcomp ~/.config/xkb/us-ru-hjkl $DISPLAY"
+	Alt_R
 
 "amixer set Master 5%+ && pkill -RTMIN+1 i3blocks"
   XF86AudioRaiseVolume

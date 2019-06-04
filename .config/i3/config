@@ -43,10 +43,16 @@ bindsym $mod+c exec --no-startup-id clipmenu
 exec --nostartup-id xautolock -time 30 -locker "systemctl suspend" -detectsleep
 
 
+bindsym $mod+F11 exec --no-startup-id xrandr --output VGA-1 --off && pkill dunst && dunst
+bindsym $mod+F12 exec --no-startup-id xrandr --output VGA-1 --rotate normal --auto --right-of LVDS-1
 
 # Translate-to-Russian script
 bindsym $mod+o exec --no-startup-id ~/Scripts/dmenu_translate_notification.sh
+bindsym $mod+Shift+o exec --no-startup-id notify-send "$(xsel -ob)" "$(trans -b :ru "$(xsel -ob)" | sed 's/ null//g')"
+bindsym $mod+Ctrl+Shift+o exec --no-startup-id notify-send "$(xsel -op)" "$(trans -b :ru "$(xsel -op)" | sed 's/ null//g')"
 
+
+bindsym $mod+Shift+t exec --no-startup-id ~/Scripts/dmenu_timer.sh
 
 # Change Thinkpad trackpoint scroll emulation mode
 bindsym $mod+F8 exec --no-startup-id ~/Scripts/trackpoint_mode_toggle.sh

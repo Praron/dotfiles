@@ -26,6 +26,8 @@ setopt HIST_FIND_NO_DUPS
 setopt HIST_SAVE_NO_DUPS
 setopt HIST_BEEP
 
+setopt CORRECT
+
 setopt autopushd pushdminus pushdtohome autocd pushdignoredups
 
 # I don't know why, but 'e' keypress made delay without this line
@@ -82,6 +84,11 @@ alias bc='bc -q'
 alias bd='. bd -si'
 alias ranger='ranger --choosedir=$HOME/.rangerdir; LASTDIR=`cat $HOME/.rangerdir`; cd "$LASTDIR"'
 alias tldr='cht.sh'
+
+alias -s py=python
+alias -g G='| grep -i '
+alias -g D='& disown'
+alias -g DD='& disown && exit'
 
 function from_copybuffer() {
     xsel -b > $1
@@ -272,3 +279,29 @@ autoload -U down-line-or-beginning-search
 zle -N down-line-or-beginning-search
 bindkey "${terminfo[kcud1]}" down-line-or-beginning-search
 fi
+
+
+# lf auto cd after quit
+lfcd () {
+    tmp="$(mktemp)"
+    lf -last-dir-path="$tmp" "$@"
+    if [ -f "$tmp" ]; then
+        dir="$(cat "$tmp")"
+        rm -f "$tmp"
+        if [ -d "$dir" ]; then
+            if [ "$dir" != "$(pwd)" ]; then
+                cd "$dir"
+            fi
+        fi
+    fi
+}
+alias lf='lfcd'
+
+
+export LESS_TERMCAP_mb=$'\E[1;31m'     # begin bold
+export LESS_TERMCAP_md=$'\E[1;36m'     # begin blink
+export LESS_TERMCAP_me=$'\E[0m'        # reset bold/blink
+export LESS_TERMCAP_so=$'\E[01;44;33m' # begin reverse video
+export LESS_TERMCAP_se=$'\E[0m'        # reset reverse video
+export LESS_TERMCAP_us=$'\E[1;32m'     # begin underline
+export LESS_TERMCAP_ue=$'\E[0m'        # reset underline
