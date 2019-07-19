@@ -43,8 +43,9 @@ bindsym $mod+c exec --no-startup-id clipmenu
 exec --nostartup-id xautolock -time 30 -locker "systemctl suspend" -detectsleep
 
 
-bindsym $mod+F11 exec --no-startup-id xrandr --output VGA-1 --off && pkill dunst && dunst
-bindsym $mod+F12 exec --no-startup-id xrandr --output VGA-1 --rotate normal --auto --right-of LVDS-1
+bindsym $mod+F11 exec --no-startup-id xrandr --output LVDS-1 --auto --output VGA-1 --off && pkill dunst && dunst
+bindsym $mod+F12 exec --no-startup-id xrandr --output VGA-1 --auto --output LVDS-1 --off && pkill dunst && dunst
+bindsym $mod+Shift+F12 exec --no-startup-id xrandr --output VGA-1 --rotate normal --auto --right-of LVDS-1
 
 # Translate-to-Russian script
 bindsym $mod+o exec --no-startup-id ~/Scripts/dmenu_translate_notification.sh

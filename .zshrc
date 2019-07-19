@@ -107,6 +107,7 @@ RPROMPT=''
 
 export PATH=$PATH:.
 export PATH=$PATH:~/Scripts
+export PATH=$PATH:~/.local/bin
 
 
 zstyle ':completion:*' rehash true
