@@ -21,8 +21,9 @@ set $mod Mod4
 # font pango:DejaVu Sans Mono 10
 # font pango: Monospace 10
 # font pango: SCP 9
-font pango: Ubuntu Mono 12
 # font pango: Fira Mono 9
+font pango: Fira Code 10
+
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -43,14 +44,19 @@ bindsym $mod+c exec --no-startup-id clipmenu
 exec --nostartup-id xautolock -time 30 -locker "systemctl suspend" -detectsleep
 
 
-bindsym $mod+F11 exec --no-startup-id xrandr --output LVDS-1 --auto --output VGA-1 --off && pkill dunst && dunst
-bindsym $mod+F12 exec --no-startup-id xrandr --output VGA-1 --auto --output LVDS-1 --off && pkill dunst && dunst
-bindsym $mod+Shift+F12 exec --no-startup-id xrandr --output VGA-1 --rotate normal --auto --right-of LVDS-1
+bindsym $mod+F11 exec --no-startup-id xrandr --output LVDS-1 --auto --output DP-1 --off && pkill dunst && dunst
+bindsym $mod+F12 exec --no-startup-id xrandr --output DP-1 --auto --output LVDS-1 --off && pkill dunst && dunst
+bindsym $mod+Shift+F12 exec --no-startup-id xrandr --output DP-1 --rotate normal --auto --right-of LVDS-1
+bindsym $mod+F10       exec --no-startup-id xrandr --output DP-1 --rotate normal --auto --right-of LVDS-1
 
 # Translate-to-Russian script
 bindsym $mod+o exec --no-startup-id ~/Scripts/dmenu_translate_notification.sh
 bindsym $mod+Shift+o exec --no-startup-id notify-send "$(xsel -ob)" "$(trans -b :ru "$(xsel -ob)" | sed 's/ null//g')"
 bindsym $mod+Ctrl+Shift+o exec --no-startup-id notify-send "$(xsel -op)" "$(trans -b :ru "$(xsel -op)" | sed 's/ null//g')"
+
+
+# Emoji script
+bindsym $mod+Ctrl+e exec --no-startup-id ~/Scripts/emoji.sh
 
 
 bindsym $mod+Shift+t exec --no-startup-id ~/Scripts/dmenu_timer.sh
@@ -157,13 +163,13 @@ bindsym $mod+Shift+a focus child
 workspace 1 output LVDS-1
 workspace 2 output LVDS-1
 workspace 3 output LVDS-1
-workspace 4 output LVDS-1
-workspace 5 output LVDS-1
-workspace 6 output VGA-1
-workspace 7 output VGA-1
-workspace 8 output VGA-1
-workspace 9 output VGA-1
-workspace 10 output VGA-1
+workspace 4 output DP-1
+workspace 5 output DP-1
+workspace 6 output DP-1
+workspace 7 output DP-1
+workspace 8 output DP-1
+workspace 9 output DP-1
+workspace 10 output DP-1
 
 
 # switch to workspace
@@ -236,12 +242,17 @@ bindsym $mod+r mode "resize"
 # Volume control
 #bindsym XF86AudioRaiseVolume exec amixer -q set Master 5%+ ; exec killall -USR1 i3status
 #bindsym XF86AudioLowerVolume exec amixer -q set Master 5%- ; exec killall -USR1 i3status
+
+bindsym XF86AudioRaiseVolume exec amixer -q -c 1 set PCM 2%+ ; exec killall -USR1 i3status
+bindsym XF86AudioLowerVolume exec amixer -q -c 1 set PCM 2%+ ; exec killall -USR1 i3status
+
 #bindsym $mod+Shift+F3 exec amixer -q set Master 20%+ ; exec killall -USR1 i3status
 #bindsym $mod+Shift+F2 exec amixer -q set Master 20%- ; exec killall -USR1 i3status
 #bindsym XF86AudioMute exec amixer -q set Master toggle
 
 
 # Exit/suspend/restart
+bindsym $mod+Shift+Delete exec systemctl suspend
 mode  "(s)leep (h)ybernate (p)owersave (r)estart shut(d)own (e)xit" {
 
         bindsym s exec sudo pm-suspend; mode "default"
@@ -256,7 +267,7 @@ mode  "(s)leep (h)ybernate (p)owersave (r)estart shut(d)own (e)xit" {
 }
 # bindsym $mod+Shift+Delete mode "(s)leep (h)ybernate (p)owersave (r)estart shut(d)own (e)xit"
 
-bindsym $mod+Shift+Delete exec i3-msg exit
+bindsym $mod+Ctrl+Shift+Delete exec i3-msg exit
 
 # Background image
 exec --no-startup-id ~/.fehbg
@@ -301,8 +312,8 @@ bindsym $mod+Tab workspace next
 # bindsym $mod+F2 exec --no-startup-id xrandr --output VGA-2 --off
 
 # Screenshot
-bindsym Print exec --no-startup-id scrot '%Y-%m-%d-%H-%M-%S.png' -e 'mv $f ~/Screenshots/'
-bindsym --release Shift+Print exec --no-startup-id import ~/Screenshots/$(date +%Y-%m-%d-%H-%M-%S).png
+bindsym Print exec --no-startup-id scrot '%Y-%m-%d-%H-%M-%S.png' -e 'mv $f ~/Screenshots/' && ~/Scripts/copy-screenshot.sh
+bindsym --release Shift+Print exec --no-startup-id import ~/Screenshots/$(date +%Y-%m-%d-%H-%M-%S).png && ~/Scripts/copy-screenshot.sh
 
 bindsym $mod+F9 exec --no-startup-id feh --no-xinerama $(ls -dp ~/Screenshots/* | grep -v /$ | sort -nr | head -1)
 
@@ -333,9 +344,12 @@ bindsym --release XF86AudioMicMute exec --no-startup-id xdotool key Alt_R ; exec
 
 # Colors
 # class                 border  bground text    indicator child_border
-client.focused          #6272A4 #6272A4 #282a36 #6272A4   #6272A4
-client.focused_inactive #44475A #44475A #282a36 #44475A   #44475A
-client.unfocused        #282A36 #282A36 #BFBFBF #282A36   #282A36
+# client.focused          #6272A4 #6272A4 #282a36 #6272A4   #6272A4
+client.focused          #282a36 #282a36 #f8f8f2 #6272A4   #6272A4
+#client.focused_inactive #44475A #44475A #282a36 #44475A   #44475A
+client.focused_inactive #282a36 #282a36 #44475a #44475A   #44475A
+# client.unfocused        #282A36 #282A36 #BFBFBF #282A36   #282A36
+client.unfocused        #000000 #000000 #44475a #282A36   #282A36
 client.urgent           #44475A #FF5555 #F8F8F2 #FF5555   #FF5555
 client.placeholder      #282A36 #282A36 #F8F8F2 #282A36   #282A36
 client.background #F8F8F2
@@ -356,6 +370,7 @@ client.background #F8F8F2
 # finds out, if available)
 bar {
         output LVDS-1
+        mode hide
         # colors { # Dracula theme
         #     background #282A36
         #     statusline #F8F8F2
@@ -373,22 +388,23 @@ bar {
         	statusline #dddddd
 
 	        # Type             border  background font
-            focused_workspace  #44475A #44475A #000000
+            focused_workspace  #282a36 #282a36 #f8f8f2
     	    # focused_workspace  #777777 #777777 #000000
             active_workspace   #333333 #333333 #000000
-       	    inactive_workspace #000000 #000000 #bbbbbb
+       	    inactive_workspace #000000 #000000 #44475a
        	    urgent_workspace   #aa0000 #990000 #ffffff
         }
 
         tray_output none
 
-        position top
+        position bottom
         status_command i3blocks
 }
 
 
 bar {
-        output VGA-1
+        output DP-1
+        mode hide
 
         # colors { # Dracula theme
         #     background #282A36
@@ -406,13 +422,12 @@ bar {
             # Whole color settings background #000000 statusline #ffffff separator #666666
             statusline #dddddd
 
-            # Type             border  background font
-            focused_workspace  #44475A #44475A #000000
+	        # Type             border  background font
+            focused_workspace  #282a36 #282a36 #f8f8f2
+    	    # focused_workspace  #777777 #777777 #000000
             active_workspace   #333333 #333333 #000000
-            # focused_workspace  #777777 #777777 #000000
-            # active_workspace   #444444 #444444 #000000
-            inactive_workspace #000000 #000000 #bbbbbb
-            urgent_workspace   #aa0000 #990000 #ffffff
+       	    inactive_workspace #000000 #000000 #44475a
+       	    urgent_workspace   #aa0000 #990000 #ffffff
         }
 
         tray_output none
