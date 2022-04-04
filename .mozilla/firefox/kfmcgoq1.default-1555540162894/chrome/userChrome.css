@@ -10,7 +10,11 @@ https://gist.github.com/Sporif/db6b3440fba0b1bcf5477afacf93f875
 */
 #statuspanel-label { 
 -moz-binding: url("userChrome.xml#js");}
+toolbarbutton#alltabs-button { -moz-binding: url("userChrome.xml#js"); }
 
+#navigator-toolbox {
+	border: none !important;
+}
 
 
 #nav-bar {
@@ -96,4 +100,61 @@ https://gist.github.com/Sporif/db6b3440fba0b1bcf5477afacf93f875
 #forward-button {
 	display: none;
 //    list-style-image: none !important;
+}
+
+
+
+@-moz-document url(chrome://browser/content/browser.xhtml)
+{
+  browser[type="content-primary"], tabbrowser tabpanels, #appcontent > #content
+  {
+    background: #44475a !important;
+  }
+}
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+browser { background-color: #44475a !important; }
+
+
+// To disable stupid rounded selected tabs from Proton.
+:root .tab-background {
+    margin-block: unset !important;
+    margin: 0 !important;
+    margin-top: 1px !important;
+    border-radius: 0 !important;
+}
+@media (-moz-proton) {
+:root .tab-background {
+    margin-block: unset !important;
+    margin: 0 !important;
+    margin-top: 1px !important;
+    border-radius: 0 !important;
+}
+}
+:root:not([lwtheme-mozlightdark]) #TabsToolbar[brighttext] #tabbrowser-tabs:not([noshadowfortests]) .tabbrowser-tab:is([visuallyselected="true"], [multiselected]) > .tab-stack > .tab-background:-moz-lwtheme {
+  box-shadow: none !important;
+}
+
+:root[uidensity="compact"] {
+    --tab-min-height: 10px !important;
+}
+
+toolbar .toolbarbutton-1 > .toolbarbutton-icon,
+toolbar .toolbarbutton-1 > .toolbarbutton-text,
+toolbar .toolbarbutton-1 > .toolbarbutton-badge-stack {
+  /*! padding: var(--toolbarbutton-inner-padding); */
+  border-radius: var(--toolbarbutton-border-radius);
+}
+
+.tab-background:is([selected], [multiselected]):-moz-lwtheme {
+  border: none !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+}
+#TabsToolbar {
+  height: 25px !important;   
+}
+#urlbar-container {
+  --urlbar-container-height: 25px !important;
+    
 }

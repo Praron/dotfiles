@@ -1,0 +1,12 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =6
+let g:netrw_dirhist_6='/home/sleepless/work/funwithflags/FunApp/src/components/multiselect'
+let g:netrw_dirhist_5='/home/sleepless/work/funwithflags/FunApp/src/components/calendar'
+let g:netrw_dirhist_4='/home/sleepless/work/funwithflags/FunApp/src/components/views'
+let g:netrw_dirhist_3='/home/sleepless/work/funwithflags/FunApp/src/components'
+let g:netrw_dirhist_2='/home/sleepless/Programming/elm/first/src'
+let g:netrw_dirhist_1='/home/sleepless/work/funwithflags/FunApp/src/components/views'
+let g:netrw_dirhist_0='/home/sleepless/work/funwithflags/FunApp/src/user_views'
+let g:netrw_dirhist_9='/home/sleepless/work/funwithflags/FunApp/src/components'
+let g:netrw_dirhist_8='/home/sleepless/work/funwithflags/FunApp/src/components/views/table'
+let g:netrw_dirhist_7='/home/sleepless/work/funwithflags/FunApp/src/components'

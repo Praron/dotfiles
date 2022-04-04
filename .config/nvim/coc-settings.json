@@ -1,0 +1,48 @@
+{
+  "suggest.echodocSupport": true,
+  "suggest.maxCompleteItemCount": 20,
+  "coc.preferences.formatOnSaveFiletypes": [
+    "elm",
+    "javascript",
+    "typescript",
+    "vue",
+    "typescriptreact",
+    "json",
+    "javascriptreact"
+  ],
+  "diagnostic.refreshOnInsertMode": true,
+  "diagnostic.errorSign": "•",
+  "diagnostic.warningSign": "•",
+  "diagnostic.infoSign": "•",
+  "vetur.format.enable": true,
+  "vetur.format.defaultFormatter.html": "none",
+  "vetur.format.defaultFormatter.ts": "none",
+  "vetur.format.defaultFormatter.css": "none",
+  "vetur.format.defaultFormatter.scss": "none",
+  "vetur.experimental.templateInterpolationService": true,
+  "eslint.autoFix": false,
+  "eslint.autoFixOnSave": false,
+  "eslint.enable": false,
+  "eslint.run": "onType",
+  "eslint.trace.server": "verbose",
+  "eslint.autoFixOnSave": true,
+  "eslint.filetypes": [
+    "javascript",
+    "typescript",
+    "vue"
+  ],
+  "typescript.format.enabled": false,
+  "languageserver": {
+    "elmLS": {
+      "command": "elm-language-server",
+      "filetypes": [
+        "elm"
+      ],
+      "rootPatterns": [
+        "elm.json"
+      ]
+    }
+  },
+  "codeLens.enable": false,
+  "coc.preferences.extensionUpdateCheck": "daily"
+}

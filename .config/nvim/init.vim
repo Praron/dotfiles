@@ -5,7 +5,19 @@ if empty(glob('~/.config/nvim/autoload/plug.vim'))
 endif
 
 call plug#begin('~/.config/nvim/plugged')
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'nvim-lua/plenary.nvim'
+Plug 'neovim/nvim-lspconfig'
+Plug 'jose-elias-alvarez/nvim-lsp-ts-utils'
+
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-cmdline'
+Plug 'hrsh7th/cmp-calc'
+Plug 'hrsh7th/nvim-cmp'
+
+" Plug 'ray-x/lsp_signature.nvim' " Doesn't work in st terminal :c
 Plug 'itchyny/lightline.vim'
 Plug 'junegunn/fzf.vim'
 Plug 'jremmen/vim-ripgrep'
@@ -17,13 +29,14 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-vinegar'
 Plug 'mcchrish/nnn.vim'
 Plug 'Yggdroot/indentLine'
+" Plug 'folke/lsp-colors.nvim'
 " Plug 'vim-scripts/tinykeymap'
 " Plug 'storyn26383/vim-vue'
 " Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
 Plug 'andys8/vim-elm-syntax'
 
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-Plug 'nvim-treesitter/nvim-treesitter-textobjects'
+" Plug 'nvim-treesitter/nvim-treesitter-textobjects' * bugged
 
 " Text objects.
 Plug 'wellle/targets.vim'
@@ -43,8 +56,10 @@ Plug 'michaeljsmith/vim-indent-object' " i/I
 " Plug 'sheerun/vim-wombat-scheme'
 " Plug 'arcticicestudio/nord-vim'
 " Plug 'dracula/vim', { 'as': 'dracula' }
+Plug 'shaunsingh/nord.nvim'
+Plug 'sainnhe/everforest'
 Plug 'airblade/vim-gitgutter'
-Plug 'christianchiarulli/nvcode-color-schemes.vim'
+"Plug 'christianchiarulli/nvcode-color-schemes.vim'
 call plug#end()
 
 for f in glob('~/.config/nvim/config/*.vim', 0, 1)
@@ -67,15 +82,21 @@ if &term =~ '256color'
     " disable Background Color Erase (BCE) so that color schemes
     " render properly when inside 256-color tmux and GNU screen.
     " see also https://sunaku.github.io/vim-256color-bce.html
-    set t_ut=
+    " set t_ut=
 endif
 
-set t_8f=^[[38;2;%lu;%lu;%lum
-set t_8b=^[[48;2;%lu;%lu;%lum
-set background=dark
+" set t_8f=^[[38;2;%lu;%lu;%lum
+" set t_8b=^[[48;2;%lu;%lu;%lum
+" set background=dark
+
+" let g:nvcode_termcolors=256
+" set t_Co=256
+" set termguicolors
+
+syntax on
 " colorscheme nord
-set t_Co=256
-set termguicolors
+let g:everforest_background = 'hard'
+colorscheme everforest
 
 set path+=**
 set iskeyword+=-
@@ -110,16 +131,12 @@ let g:rg_highlight = 'true'
 
 " FZF config.
 let g:fzf_command_prefix = 'Fzf'
-let g:fzf_preview_window = 'down:30%'
+let g:fzf_preview_window = 'right:50%'
 let g:fzf_layout = { 'window': { 'width': 1, 'height': 0.8 } }
 nnoremap gf  :FzfFiles<CR>
 nnoremap grg :FzfRg
 nnoremap gb  :FzfBuffers<CR>
 nnoremap g:  :FzfHistory:<CR>
-
-
-" DELETEME: dirty hack because I broke autofixOnSave :c
-" nnoremap <leader>f :CocCommand eslint.executeAutofix<CR>
 
 
 let g:nnn#set_default_mappings = 0
@@ -191,7 +208,7 @@ let g:NERDCompactSexyComs = 1
 
 
 let g:lightline = {
-  \ 'colorscheme': 'nord',
+  \ 'colorscheme': 'everforest',
   \ 'tabline': {
   \   'left': [ [ 'tabs' ] ],
   \   'right': [ [] ]
@@ -202,7 +219,7 @@ let g:lightline = {
   \   'right': [ [ 'githunks' ],
   \              [ 'lineinfo' ],
   \              [ 'filetype' ],
-  \              [ 'cocstatus' ]]
+  \            ]
   \ },
   \ 'inactive': {
   \  'left': [ [ 'readonly', 'filename', 'modified' ] ],
@@ -213,9 +230,10 @@ let g:lightline = {
   \   'githunks': 'GitStatus',
   \   'lineinfo': 'LightlineLineinfo',
   \   'filepath': 'LightlineFilepath',
-  \   'cocstatus': 'coc#status'
   \ },
   \ }
+  " \              [ 'cocstatus' ]]
+  " \   'cocstatus': 'coc#status'
 
 function! LightlineFilepath()
   let root = fnamemodify(get(b:, 'git_dir'), ':h')
@@ -271,12 +289,11 @@ let g:indentLine_first_char = '│'
 let g:indentLine_defaultGroup = 'NonText'
 
 " Some fixes for nord conceal colors.
-au Colorscheme * hi! link Conceal Number
-hi Conceal ctermfg=NONE
-hi Conceal ctermbg=NONE
-hi Conceal guifg=NONE
-hi Conceal guibg=NONE
-
+" au Colorscheme * hi! link Conceal Number
+" hi Conceal ctermfg=NONE
+" hi Conceal ctermbg=NONE
+" hi Conceal guifg=NONE
+" hi Conceal guibg=NONE
 
 
 " configure treesitter
@@ -314,13 +331,11 @@ require'nvim-treesitter.configs'.setup {
 }
 EOF
 
-" configure nvcode-color-schemes
-let g:nvcode_termcolors=256
-
-syntax on
-colorscheme nord
 " Fix for wrong yellow comments
 highlight! Comment ctermfg=240 ctermbg=NONE gui=NONE cterm=NONE
+
+" highlight! DiagnosticVirtualTextError ctermfg=131 ctermbg=NONE gui=NONE cterm=NONE
+
 
 " checks if your terminal has 24-bit color support
 if (has("termguicolors"))
