@@ -9,6 +9,8 @@ call plug#begin('~/.config/nvim/plugged')
 Plug 'nvim-lua/plenary.nvim'
 Plug 'neovim/nvim-lspconfig'
 Plug 'jose-elias-alvarez/nvim-lsp-ts-utils'
+Plug 'jose-elias-alvarez/null-ls.nvim'
+" Plug 'j-hui/fidget.nvim'
 
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
@@ -16,19 +18,29 @@ Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/cmp-calc'
 Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-vsnip'
+Plug 'rafamadriz/friendly-snippets'
+Plug 'hrsh7th/vim-vsnip'
+Plug 'hrsh7th/vim-vsnip-integ'
+
+Plug 'windwp/nvim-autopairs'
+Plug 'windwp/nvim-ts-autotag'
 
 " Plug 'ray-x/lsp_signature.nvim' " Doesn't work in st terminal :c
-Plug 'itchyny/lightline.vim'
-Plug 'junegunn/fzf.vim'
-Plug 'jremmen/vim-ripgrep'
-Plug 'preservim/nerdcommenter'
-Plug 'Krasjet/auto.pairs'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-vinegar'
+Plug 'itchyny/lightline.vim'
+Plug 'junegunn/fzf.vim'
+Plug 'jremmen/vim-ripgrep'
+Plug 'preservim/nerdcommenter'
+" Plug 'jiangmiao/auto-pairs'
+" Plug 'cohama/lexima.vim'
 Plug 'mcchrish/nnn.vim'
 Plug 'Yggdroot/indentLine'
+Plug 'moll/vim-bbye' " :Bdelete and :Bwipeout
+Plug 'folke/which-key.nvim'
 " Plug 'folke/lsp-colors.nvim'
 " Plug 'vim-scripts/tinykeymap'
 " Plug 'storyn26383/vim-vue'
@@ -36,29 +48,21 @@ Plug 'Yggdroot/indentLine'
 Plug 'andys8/vim-elm-syntax'
 
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-" Plug 'nvim-treesitter/nvim-treesitter-textobjects' * bugged
+Plug 'nvim-treesitter/nvim-treesitter-textobjects'
+Plug 'David-Kunz/treesitter-unit'
+
+Plug 'airblade/vim-gitgutter'
 
 " Text objects.
-Plug 'wellle/targets.vim'
-Plug 'kana/vim-textobj-user'
-Plug 'vimtaku/vim-textobj-keyvalue'  " k/v, doesn't seems to work.
-Plug 'glts/vim-textobj-indblock'  " o
-Plug 'deathlyfrantic/vim-textobj-blanklines'  " <space>
-Plug 'michaeljsmith/vim-indent-object' " i/I
+" Plug 'wellle/targets.vim'
+" Plug 'kana/vim-textobj-user'
+" Plug 'vimtaku/vim-textobj-keyvalue'  " k/v, doesn't seems to work.
+" Plug 'glts/vim-textobj-indblock'  " o
+" Plug 'deathlyfrantic/vim-textobj-blanklines'  " <space>
+" Plug 'michaeljsmith/vim-indent-object' " i/I
 
 " Color schemes.
-" Plug 'junegunn/seoul256.vim'
-" Plug 'andreasvc/vim-256noir'
-" Plug 'ajmwagar/vim-deus'
-" Plug 'jacoborus/tender.vim'
-" Plug 'joshdick/onedark.vim'
-" Plug 'morhetz/gruvbox'
-" Plug 'sheerun/vim-wombat-scheme'
-" Plug 'arcticicestudio/nord-vim'
-" Plug 'dracula/vim', { 'as': 'dracula' }
-Plug 'shaunsingh/nord.nvim'
 Plug 'sainnhe/everforest'
-Plug 'airblade/vim-gitgutter'
 "Plug 'christianchiarulli/nvcode-color-schemes.vim'
 call plug#end()
 
@@ -151,8 +155,7 @@ nnoremap <silent> gl :bn<CR>
 
 nnoremap <leader>w :w<CR>
 nnoremap <leader>q :q
-nnoremap <leader>/ :Lines<CR>
-nnoremap <leader>bd :bd<CR>
+nnoremap <leader>bd :bdelete<CR>
 
 " Search by visual selected text.
 vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
@@ -164,8 +167,16 @@ vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
 " nnoremap <leader><leader> <leader>
 " nnoremap <silent> g :WhichKey 'g'<CR>
 
+set completeopt=menu,menuone,noselect
+
 set ignorecase
 set smartcase
+
+set autoindent
+" set smartindent
+
+set splitbelow
+set splitright
 
 " Auto watch external file changes.
 set autoread
@@ -181,9 +192,6 @@ nnoremap <silent> <esc> :noh<CR>
 " Don't use Ex mode, use Q for formatting.
 " Revert with ":unmap Q".
 map Q gq
-
-" Select to visual mode pasted/edited text.
-nnoremap gp `[v`]
 
 
 " Put these in an autocmd group, so that you can revert them with:
@@ -296,13 +304,25 @@ let g:indentLine_defaultGroup = 'NonText'
 " hi Conceal guibg=NONE
 
 
-" configure treesitter
 lua << EOF
+require('nvim-autopairs').setup{}
+
 require'nvim-treesitter.configs'.setup {
+  autotag = {
+    enable = true,
+  },
   ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
   highlight = {
-    enable = true,              -- false will disable the whole extension
-    disable = { },  -- list of language that will be disabled
+    enable = true, -- false will disable the whole extension
+  },
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+      init_selection = "gs",
+      node_incremental = "i",
+      scope_incremental = "I",
+      node_decremental = "gd",
+    },
   },
   textobjects = {
     select = {
@@ -317,19 +337,77 @@ require'nvim-treesitter.configs'.setup {
         ["if"] = "@function.inner",
         ["ac"] = "@class.outer",
         ["ic"] = "@class.inner",
-
-        -- Or you can define your own textobjects like this
-        ["iF"] = {
-          python = "(function_definition) @function",
-          cpp = "(function_definition) @function",
-          c = "(function_definition) @function",
-          java = "(method_declaration) @function",
-        },
+        ["aa"] = "@parameter.outer",
+        ["ia"] = "@parameter.inner",
+        ["ab"] = "@parameter.outer",
+        ["ib"] = "@parameter.inner",
       },
+    },
+
+    move = {
+      enable = true,
+      set_jumps = true, -- whether to set jumps in the jumplist
+      goto_next_start = {
+        ["]]"] = "@function.outer",
+        ["]c"] = "@class.outer",
+      },
+      goto_next_end = {
+        ["]["] = "@function.outer",
+        ["]C"] = "@class.outer",
+      },
+      goto_previous_start = {
+        ["[["] = "@function.outer",
+        ["[c"] = "@class.outer",
+      },
+      goto_previous_end = {
+        ["[]"] = "@function.outer",
+        ["[C"] = "@class.outer",
+      },
+    },
+
+    indent = {
+      enable = true
     },
   },
 }
+
+require("null-ls").setup {
+    sources = {
+      --require("null-ls").builtins.formatting.prettierd.with { extra_args = { "--no-semi", "--single-quote", "--jsx-single-quote" } },
+      require("null-ls").builtins.formatting.prettierd.with{ env = {
+        PRETTIERD_DEFAULT_CONFIG = vim.fn.expand "~/.config/prettierd/prettierrc.json",
+      } },
+      -- require("null-ls").builtins.diagnostics.eslint,
+    },
+    on_attach = function(client)
+      if client.resolved_capabilities.document_formatting then
+        vim.cmd([[
+        augroup LspFormatting
+          autocmd! * <buffer>
+          autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
+        augroup END
+        ]])
+      end
+    end,
+}
+
+-- require"fidget".setup{}
+
+  require("which-key").setup {
+    icons = {
+      separator = '-'
+      }
+    }
+
 EOF
+
+set timeoutlen=500
+
+xnoremap <silent> iu :lua require"treesitter-unit".select()<CR>
+xnoremap <silent> au :lua require"treesitter-unit".select(true)<CR>
+onoremap <silent> iu :<c-u>lua require"treesitter-unit".select()<CR>
+onoremap <silent> au :<c-u>lua require"treesitter-unit".select(true)<CR>
+
 
 " Fix for wrong yellow comments
 highlight! Comment ctermfg=240 ctermbg=NONE gui=NONE cterm=NONE

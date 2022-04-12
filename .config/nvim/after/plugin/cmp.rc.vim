@@ -4,11 +4,14 @@ set completeopt=menuone,noinsert,noselect
 
 lua <<EOF
   local cmp = require'cmp'
+  local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+
+  cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done({  map_char = { tex = '' } }))
 
   cmp.setup({
     snippet = {
       expand = function(args)
-        require('luasnip').lsp_expand(args.body)
+        vim.fn["vsnip#anonymous"](args.body)
       end,
     },
     mapping = {
@@ -23,6 +26,7 @@ lua <<EOF
     },
     sources = cmp.config.sources({
       { name = 'nvim_lsp' },
+      { name = 'vsnip' },
     }, {
       { name = 'buffer' },
       { name = 'calc' },
