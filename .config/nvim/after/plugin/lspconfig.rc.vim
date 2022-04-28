@@ -125,6 +125,11 @@ nvim_lsp.flow.setup {
   capabilities = capabilities
 }
 
+nvim_lsp.vuels.setup {
+  on_attach = on_attach,
+  capabilities = capabilities
+}
+
 nvim_lsp.tsserver.setup {
   init_options = require("nvim-lsp-ts-utils").init_options,
   on_attach = on_attach,

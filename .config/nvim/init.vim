@@ -8,6 +8,7 @@ call plug#begin('~/.config/nvim/plugged')
 " Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'nvim-lua/plenary.nvim'
 Plug 'neovim/nvim-lspconfig'
+Plug 'williamboman/nvim-lsp-installer'
 Plug 'jose-elias-alvarez/nvim-lsp-ts-utils'
 Plug 'jose-elias-alvarez/null-ls.nvim'
 " Plug 'j-hui/fidget.nvim'
@@ -16,7 +17,7 @@ Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
-Plug 'hrsh7th/cmp-calc'
+" Plug 'hrsh7th/cmp-calc'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-vsnip'
 Plug 'rafamadriz/friendly-snippets'
@@ -50,6 +51,7 @@ Plug 'andys8/vim-elm-syntax'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 Plug 'David-Kunz/treesitter-unit'
+Plug 'JoosepAlviste/nvim-ts-context-commentstring'
 
 Plug 'airblade/vim-gitgutter'
 
@@ -349,19 +351,15 @@ require'nvim-treesitter.configs'.setup {
       set_jumps = true, -- whether to set jumps in the jumplist
       goto_next_start = {
         ["]]"] = "@function.outer",
-        ["]c"] = "@class.outer",
       },
       goto_next_end = {
         ["]["] = "@function.outer",
-        ["]C"] = "@class.outer",
       },
       goto_previous_start = {
         ["[["] = "@function.outer",
-        ["[c"] = "@class.outer",
       },
       goto_previous_end = {
         ["[]"] = "@function.outer",
-        ["[C"] = "@class.outer",
       },
     },
 
@@ -369,14 +367,20 @@ require'nvim-treesitter.configs'.setup {
       enable = true
     },
   },
+  context_commentstring = {
+    enable = true
+  },
 }
 
 require("null-ls").setup {
     sources = {
       --require("null-ls").builtins.formatting.prettierd.with { extra_args = { "--no-semi", "--single-quote", "--jsx-single-quote" } },
-      require("null-ls").builtins.formatting.prettierd.with{ env = {
-        PRETTIERD_DEFAULT_CONFIG = vim.fn.expand "~/.config/prettierd/prettierrc.json",
-      } },
+      require("null-ls").builtins.formatting.prettierd.with{
+        disabled_filetypes={ "vue" }, -- TODO FIXME DELETEME
+        env = {
+          PRETTIERD_DEFAULT_CONFIG = vim.fn.expand "~/.config/prettierd/prettierrc.json",
+        },
+      },
       -- require("null-ls").builtins.diagnostics.eslint,
     },
     on_attach = function(client)
@@ -390,6 +394,14 @@ require("null-ls").setup {
       end
     end,
 }
+
+
+local lsp_installer = require("nvim-lsp-installer")
+lsp_installer.on_server_ready(function(server)
+    local opts = {}
+    server:setup(opts)
+end)
+
 
 -- require"fidget".setup{}
 

@@ -29,7 +29,6 @@ lua <<EOF
       { name = 'vsnip' },
     }, {
       { name = 'buffer' },
-      { name = 'calc' },
     }),
   })
 
