@@ -16,6 +16,22 @@ HISTSIZE=100000
 SAVEHIST=100000
 bindkey -e
 
+
+# Basic auto/tab complete:
+autoload -U compinit
+zstyle ':completion:*' menu select
+zmodload zsh/complist
+compinit
+_comp_options+=(globdots)		# Include hidden files.
+
+# Use vim keys in tab complete menu:
+bindkey -M menuselect 'h' vi-backward-char
+bindkey -M menuselect 'k' vi-up-line-or-history
+bindkey -M menuselect 'l' vi-forward-char
+bindkey -M menuselect 'j' vi-down-line-or-history
+# bindkey -v '^?' backward-delete-char
+
+
 # Remove duplications in zsh history
 setopt EXTENDED_HISTORY
 setopt HIST_EXPIRE_DUPS_FIRST
@@ -47,6 +63,7 @@ export PAGER=less
 
 # For Telegram
 export FONTCONFIG_FILE=~/.config/tgfonts.conf
+
 
 # Fuzzy search
 . /usr/share/fzf/key-bindings.zsh
@@ -84,6 +101,7 @@ alias bc='bc -q'
 alias bd='. bd -si'
 alias ranger='ranger --choosedir=$HOME/.rangerdir; LASTDIR=`cat $HOME/.rangerdir`; cd "$LASTDIR"'
 alias tldr='cht.sh'
+alias rg='rg -S'
 
 alias -s py=python
 alias -g G='| grep -i '
@@ -105,10 +123,12 @@ PS1='%-47(l.%T .)%F{%(?.green.red)}%-100(l.%n@%M:%~.%-40(l.%25<..<%~.[]))%f %# '
 PS2='> '
 RPROMPT=''
 
-export PATH=$PATH:.
+#export PATH=$PATH:.
 export PATH=$PATH:~/Scripts
 export PATH=$PATH:~/.local/bin
-
+export PATH=~/Programming/pebble/pebble-sdk-4.5-linux64/bin:$PATH
+export PATH=$PATH:~/.cargo/bin
+export PATH=$PATH:~/.luarocks/bin
 
 zstyle ':completion:*' rehash true
 
@@ -306,3 +326,7 @@ export LESS_TERMCAP_so=$'\E[01;44;33m' # begin reverse video
 export LESS_TERMCAP_se=$'\E[0m'        # reset reverse video
 export LESS_TERMCAP_us=$'\E[1;32m'     # begin underline
 export LESS_TERMCAP_ue=$'\E[0m'        # reset underline
+
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+source /home/sleepless/.config/broot/launcher/bash/br
