@@ -40,7 +40,7 @@ local on_attach = function(client, bufnr)
       filter_out_diagnostics_by_code = {},
 
       -- inlay hints
-      auto_inlay_hints = true,
+      auto_inlay_hints = false,
       inlay_hints_highlight = "Comment",
       inlay_hints_priority = 200, -- priority of the hint extmarks
       inlay_hints_throttle = 150, -- throttle the inlay hint request
@@ -84,8 +84,8 @@ local on_attach = function(client, bufnr)
 
   -- See `:help vim.lsp.*` for documentation on any of the below functions
   --buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-  buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  --buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+  --buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
   buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
   buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
   --buf_set_keymap('i', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
@@ -94,12 +94,12 @@ local on_attach = function(client, bufnr)
   --buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
   buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-  buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+  --buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
   buf_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
   buf_set_keymap('n', 'gp', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
   buf_set_keymap('n', 'gn', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
   --buf_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
-  buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
+  buf_set_keymap("n", "<space>fF", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
 
   if client.name == 'tsserver' then
     client.resolved_capabilities.document_formatting = false
@@ -120,10 +120,10 @@ local capabilities = require('cmp_nvim_lsp').update_capabilities(
   vim.lsp.protocol.make_client_capabilities()
 )
 
-nvim_lsp.flow.setup {
-  on_attach = on_attach,
-  capabilities = capabilities
-}
+--nvim_lsp.flow.setup {
+  --on_attach = on_attach,
+  --capabilities = capabilities
+--}
 
 nvim_lsp.vuels.setup {
   on_attach = on_attach,
@@ -133,10 +133,9 @@ nvim_lsp.vuels.setup {
 nvim_lsp.tsserver.setup {
   init_options = require("nvim-lsp-ts-utils").init_options,
   on_attach = on_attach,
-  filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
-  capabilities = capabilities
+  --filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "typescript.tsx" },
+  capabilities = capabilities,
 }
-
 
 -- Disable signs in gutter.
 local signs = { Error = "", Warn = "", Hint = "", Info = "" }
@@ -154,6 +153,8 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
       --spacing = 4,
       prefix = ''
     }
+
+    --virtual_text = true,
   }
 )
 

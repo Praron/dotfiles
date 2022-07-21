@@ -24,6 +24,8 @@ Plug 'rafamadriz/friendly-snippets'
 Plug 'hrsh7th/vim-vsnip'
 Plug 'hrsh7th/vim-vsnip-integ'
 
+Plug 'dominikduda/vim_current_word'
+
 Plug 'windwp/nvim-autopairs'
 Plug 'windwp/nvim-ts-autotag'
 
@@ -33,8 +35,9 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-vinegar'
 Plug 'itchyny/lightline.vim'
-Plug 'junegunn/fzf.vim'
-Plug 'jremmen/vim-ripgrep'
+" Plug 'junegunn/fzf'
+" Plug 'junegunn/fzf.vim'
+" Plug 'jremmen/vim-ripgrep'
 Plug 'preservim/nerdcommenter'
 " Plug 'jiangmiao/auto-pairs'
 " Plug 'cohama/lexima.vim'
@@ -48,12 +51,18 @@ Plug 'folke/which-key.nvim'
 " Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
 Plug 'andys8/vim-elm-syntax'
 
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+Plug 'nvim-telescope/telescope-ui-select.nvim'
+
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 Plug 'David-Kunz/treesitter-unit'
 Plug 'JoosepAlviste/nvim-ts-context-commentstring'
 
 Plug 'airblade/vim-gitgutter'
+
+Plug 'ggandor/leap.nvim'
 
 " Text objects.
 " Plug 'wellle/targets.vim'
@@ -104,6 +113,8 @@ syntax on
 let g:everforest_background = 'hard'
 colorscheme everforest
 
+set laststatus=3
+
 set path+=**
 set iskeyword+=-
 nnoremap <Space> <Nop>
@@ -133,16 +144,46 @@ augroup END
 " nnoremap gb :ls<CR>:b<space>
 
 " Rg config.
-let g:rg_highlight = 'true'
+" let g:rg_highlight = 'true'
 
 " FZF config.
-let g:fzf_command_prefix = 'Fzf'
-let g:fzf_preview_window = 'right:50%'
-let g:fzf_layout = { 'window': { 'width': 1, 'height': 0.8 } }
-nnoremap gf  :FzfFiles<CR>
-nnoremap grg :FzfRg
-nnoremap gb  :FzfBuffers<CR>
-nnoremap g:  :FzfHistory:<CR>
+" let g:fzf_command_prefix = 'Fzf'
+" let g:fzf_preview_window = 'right:50%'
+" let g:fzf_layout = { 'window': { 'width': 1, 'height': 0.8 } }
+" nnoremap gf  :FzfFiles<CR>
+" nnoremap grg :FzfRg
+" nnoremap gb  :FzfBuffers<CR>
+" nnoremap g:  :FzfHistory:<CR>
+
+
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fG <cmd>Telescope grep_string<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+nnoremap <leader>fr <cmd>Telescope lsp_references<cr>
+nnoremap <leader>fB <cmd>Telescope builtin<cr>
+nnoremap <leader>f: <cmd>Telescope command_history<cr>
+nnoremap gd <cmd>Telescope lsp_definitions<cr>
+nnoremap gD <cmd>Telescope lsp_type_definitions<cr>
+lua << EOF
+require('telescope').setup{
+  extensions = {
+    ["ui-select"] = {
+      require("telescope.themes").get_dropdown {
+      },
+    },
+  },
+  defaults = {
+    path_display={"smart"},
+    layout_config = {
+      horizontal = { width = 0.99, preview_width = 0.5 }
+    },
+  },
+}
+require('telescope').load_extension('fzf')
+require("telescope").load_extension("ui-select")
+EOF
 
 
 let g:nnn#set_default_mappings = 0
@@ -162,12 +203,10 @@ nnoremap <leader>bd :bdelete<CR>
 " Search by visual selected text.
 vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
 
-" WhichKey config.
-" set timeoutlen=500
-" highlight WhichKeyFloating cterm=NONE ctermfg=14 ctermbg=0 gui=NONE guifg=#93a1a1 guibg=#002931
-" nnoremap <silent> <leader> :WhichKey '<space>'<CR>
-" nnoremap <leader><leader> <leader>
-" nnoremap <silent> g :WhichKey 'g'<CR>
+
+let g:vim_current_word#highlight_twins = 1
+let g:vim_current_word#highlight_current_word = 0
+
 
 set completeopt=menu,menuone,noselect
 
@@ -194,6 +233,9 @@ nnoremap <silent> <esc> :noh<CR>
 " Don't use Ex mode, use Q for formatting.
 " Revert with ":unmap Q".
 map Q gq
+
+
+noremap <leader>G :G<CR>
 
 
 " Put these in an autocmd group, so that you can revert them with:
@@ -313,7 +355,7 @@ require'nvim-treesitter.configs'.setup {
   autotag = {
     enable = true,
   },
-  ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+  --ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
   highlight = {
     enable = true, -- false will disable the whole extension
   },
@@ -411,6 +453,8 @@ end)
       }
     }
 
+  require('leap').set_default_keymaps()
+
 EOF
 
 set timeoutlen=500
@@ -432,4 +476,3 @@ if (has("termguicolors"))
     set termguicolors
     hi LineNr ctermbg=NONE guibg=NONE
 endif
-
