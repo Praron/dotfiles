@@ -102,7 +102,7 @@ local on_attach = function(client, bufnr)
   buf_set_keymap("n", "<space>fF", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
 
   if client.name == 'tsserver' then
-    client.resolved_capabilities.document_formatting = false
+    client.server_capabilities.documentFormattingProvider = false
   end
 
   --if client.resolved_capabilities.document_formatting then
@@ -116,9 +116,7 @@ end
 
 
 -- Set up completion using nvim_cmp with LSP source
-local capabilities = require('cmp_nvim_lsp').update_capabilities(
-  vim.lsp.protocol.make_client_capabilities()
-)
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 --nvim_lsp.flow.setup {
   --on_attach = on_attach,

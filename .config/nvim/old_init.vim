@@ -11,6 +11,8 @@ Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/nvim-lsp-installer'
 Plug 'jose-elias-alvarez/nvim-lsp-ts-utils'
 Plug 'jose-elias-alvarez/null-ls.nvim'
+Plug 'williamboman/mason.nvim'
+Plug 'williamboman/mason-lspconfig.nvim'
 " Plug 'j-hui/fidget.nvim'
 
 Plug 'hrsh7th/cmp-nvim-lsp'
@@ -29,6 +31,13 @@ Plug 'dominikduda/vim_current_word'
 Plug 'windwp/nvim-autopairs'
 Plug 'windwp/nvim-ts-autotag'
 
+Plug 'kevinhwang91/promise-async'
+Plug 'kevinhwang91/nvim-ufo'
+
+Plug 'kevinhwang91/nvim-bqf'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+
 " Plug 'ray-x/lsp_signature.nvim' " Doesn't work in st terminal :c
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
@@ -45,17 +54,19 @@ Plug 'mcchrish/nnn.vim'
 Plug 'Yggdroot/indentLine'
 Plug 'moll/vim-bbye' " :Bdelete and :Bwipeout
 Plug 'folke/which-key.nvim'
-" Plug 'folke/lsp-colors.nvim'
+Plug 'folke/lsp-colors.nvim'
 " Plug 'vim-scripts/tinykeymap'
 " Plug 'storyn26383/vim-vue'
 " Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
 Plug 'andys8/vim-elm-syntax'
+" Plug 'Maan2003/lsp_lines.nvim'
 
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 Plug 'nvim-telescope/telescope-ui-select.nvim'
 
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'nvim-treesitter/nvim-treesitter-context'
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 Plug 'David-Kunz/treesitter-unit'
 Plug 'JoosepAlviste/nvim-ts-context-commentstring'
@@ -71,9 +82,17 @@ Plug 'ggandor/leap.nvim'
 " Plug 'glts/vim-textobj-indblock'  " o
 " Plug 'deathlyfrantic/vim-textobj-blanklines'  " <space>
 " Plug 'michaeljsmith/vim-indent-object' " i/I
+Plug 'echasnovski/mini.nvim'
+
+" Plug 'folke/noice.nvim'
+" Plug 'MunifTanjim/nui.nvim'
+
+Plug 'brenoprata10/nvim-highlight-colors'
 
 " Color schemes.
 Plug 'sainnhe/everforest'
+Plug 'fxn/vim-monochrome'
+Plug 'huyvohcmc/atlas.vim'
 "Plug 'christianchiarulli/nvcode-color-schemes.vim'
 call plug#end()
 
@@ -93,24 +112,11 @@ let loaded_netrwPlugin = 1
 
 set noshowmode
 
-if &term =~ '256color'
-    " disable Background Color Erase (BCE) so that color schemes
-    " render properly when inside 256-color tmux and GNU screen.
-    " see also https://sunaku.github.io/vim-256color-bce.html
-    " set t_ut=
-endif
-
-" set t_8f=^[[38;2;%lu;%lu;%lum
-" set t_8b=^[[48;2;%lu;%lu;%lum
-" set background=dark
-
-" let g:nvcode_termcolors=256
-" set t_Co=256
-" set termguicolors
-
 syntax on
-" colorscheme nord
+
 let g:everforest_background = 'hard'
+let g:everforest_diagnostic_virtual_text = 'colored'
+let g:everforest_diagnostic_line_highlight = '1'
 colorscheme everforest
 
 set laststatus=3
@@ -224,8 +230,8 @@ set autoread
 au CursorHold,CursorHoldI * checktime
 
 " System clipboard support.
-noremap <leader>y "+y
-noremap <leader>p "+p
+noremap <leader>y "*y
+noremap <leader>p "*p
 
 " Disable search highlght by Esc.
 nnoremap <silent> <esc> :noh<CR>
@@ -339,6 +345,7 @@ let g:indentLine_showFirstIndentLevel = 1
 let g:indentLine_first_char = '│'
 " let g:indentLine_setColors = 0
 let g:indentLine_defaultGroup = 'NonText'
+let g:vim_json_conceal=0
 
 " Some fixes for nord conceal colors.
 " au Colorscheme * hi! link Conceal Number
@@ -362,10 +369,8 @@ require'nvim-treesitter.configs'.setup {
   incremental_selection = {
     enable = true,
     keymaps = {
-      init_selection = "gs",
-      node_incremental = "i",
-      scope_incremental = "I",
-      node_decremental = "gd",
+      node_incremental = "v",
+      node_decremental = "V",
     },
   },
   textobjects = {
@@ -413,6 +418,7 @@ require'nvim-treesitter.configs'.setup {
     enable = true
   },
 }
+require("treesitter-context").setup{}
 
 require("null-ls").setup {
     sources = {
@@ -426,7 +432,7 @@ require("null-ls").setup {
       -- require("null-ls").builtins.diagnostics.eslint,
     },
     on_attach = function(client)
-      if client.resolved_capabilities.document_formatting then
+      if client.server_capabilities.documentFormattingProvider then
         vim.cmd([[
         augroup LspFormatting
           autocmd! * <buffer>
@@ -447,13 +453,47 @@ end)
 
 -- require"fidget".setup{}
 
-  require("which-key").setup {
-    icons = {
-      separator = '-'
-      }
+require("which-key").setup {
+  icons = {
+    separator = '-'
     }
+  }
 
-  require('leap').set_default_keymaps()
+require('leap').set_default_keymaps()
+
+
+require('mini.ai').setup()
+
+-- require("noice").setup()
+
+
+-----
+-- Folding and nvim-ufo
+vim.o.foldcolumn = '1' -- '0' is not bad
+vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+vim.o.foldlevelstart = 99
+vim.o.foldenable = true
+
+-- Using ufo provider need remap `zR` and `zM`. If Neovim is 0.6.1, remap yourself
+vim.keymap.set('n', 'zR', require('ufo').openAllFolds)
+vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
+
+require('ufo').setup({
+    provider_selector = function(bufnr, filetype, buftype)
+        return {'treesitter', 'indent'}
+    end
+})
+-----
+
+require('bqf')
+
+require("mason").setup()
+require("mason-lspconfig").setup()
+
+
+require('nvim-highlight-colors').setup {
+  enable_named_colors = false
+}
 
 EOF
 
@@ -465,14 +505,9 @@ onoremap <silent> iu :<c-u>lua require"treesitter-unit".select()<CR>
 onoremap <silent> au :<c-u>lua require"treesitter-unit".select(true)<CR>
 
 
-" Fix for wrong yellow comments
-highlight! Comment ctermfg=240 ctermbg=NONE gui=NONE cterm=NONE
-
-" highlight! DiagnosticVirtualTextError ctermfg=131 ctermbg=NONE gui=NONE cterm=NONE
-
-
 " checks if your terminal has 24-bit color support
 if (has("termguicolors"))
     set termguicolors
     hi LineNr ctermbg=NONE guibg=NONE
 endif
+
